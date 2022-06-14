@@ -8018,6 +8018,10 @@ void Character::absorb_hit( const bodypart_id &bp, damage_instance &dam )
         bool outermost = true;
         // The worn vector has the innermost item first, so
         // iterate reverse to damage the outermost (last in worn vector) first.
+
+        int armor_roll = rng(1, 100);
+        int total_coverage = 0;
+
         for( auto iter = worn.rbegin(); iter != worn.rend(); ) {
             item &armor = *iter;
 
@@ -8043,7 +8047,7 @@ void Character::absorb_hit( const bodypart_id &bp, damage_instance &dam )
             }
 
             if( !destroy ) {
-                destroy = armor_absorb( elem, armor );
+                destroy = armor_absorb( elem, armor , armor_roll, total_coverage);
             }
 
             if( destroy ) {
@@ -8088,10 +8092,15 @@ void Character::absorb_hit( const bodypart_id &bp, damage_instance &dam )
     }
 }
 
-bool Character::armor_absorb( damage_unit &du, item &armor )
+bool Character::armor_absorb( damage_unit &du, item &armor, int &armor_roll, int &total_coverage)
 {
-    if( rng( 1, 100 ) > armor.get_coverage() ) {
+    total_coverage += armor.get_coverage();
+    if (armor_roll > total_coverage) {
         return false;
+    }
+    else {
+        armor_roll += 100;
+
     }
 
     // TODO: add some check for power armor

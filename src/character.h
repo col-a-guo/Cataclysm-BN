@@ -720,7 +720,7 @@ class Character : public Creature, public visitable<Character>
          * Reduces and mutates du, prints messages about armor taking damage.
          * @return true if the armor was completely destroyed (and the item must be deleted).
          */
-        bool armor_absorb( damage_unit &du, item &armor );
+        bool armor_absorb(damage_unit& du, item& armor, int& armor_roll, int& total_coverage);
         /**
          * Check for passive bionics that provide armor, and returns the armor bonus
          * This is called from player::passive_absorb_hit
